@@ -1,0 +1,8 @@
+- Log in to MOG x
+- Log in to Beats
+- Get all playlists from MOG x
+- Get all favorite tracks from MOG x
+- Get all favorite albums from MOG x
+- Save a playlist to Beats
+- Save favorite tracks to Beats
+- Save favorite albums to Beats

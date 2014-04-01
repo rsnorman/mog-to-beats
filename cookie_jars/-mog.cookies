@@ -1,0 +1,16 @@
+---
+mog.com:
+  /:
+    !binary "X21vZy5jb20tcmVkdXhfc2Vzc2lvbl9wcm9kdWN0aW9u": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        X21vZy5jb20tcmVkdXhfc2Vzc2lvbl9wcm9kdWN0aW9u
+      value: d2130fb5fc3a5ee4b9e80eeeaa8f7699
+      domain: mog.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: true
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 22:31:54.016301000 -04:00
+      accessed_at: 2014-03-31 22:31:54.117298000 -04:00

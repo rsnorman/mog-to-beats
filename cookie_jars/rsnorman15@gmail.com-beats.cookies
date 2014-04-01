@@ -1,0 +1,120 @@
+---
+www.beatsmusic.com:
+  /:
+    !binary "aTE4bmV4dA==": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        aTE4bmV4dA==
+      value: en
+      domain: www.beatsmusic.com
+      for_domain: false
+      path: /
+      secure: false
+      httponly: false
+      expires: Wed, 01 Apr 2015 03:21:03 GMT
+      max_age: 
+      created_at: 2014-03-31 23:21:03.597742000 -04:00
+      accessed_at: 2014-03-31 23:21:03.597742000 -04:00
+beatsmusic.com:
+  /:
+    uuid: !ruby/object:Mechanize::Cookie
+      name: uuid
+      value: efe32b62-fec5-4942-abd3-0a4a692f951f
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.368505000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
+    beats-prod-sid: !ruby/object:Mechanize::Cookie
+      name: beats-prod-sid
+      value: s%3AYaUN3TMmZY96Q3ilwxuhJRtu.R9GELr7oDNYorYmrlOpI4eDbbs2d3rq0q%2B%2B2Vs%2F9Uec
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: true
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.370734000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
+    !binary "bG9nZ2VkX2lu": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        bG9nZ2VkX2lu
+      value: 'true'
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.831120000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
+    !binary "YWNjZXNzX3Rva2Vu": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        YWNjZXNzX3Rva2Vu
+      value: Mg%3D%3D%24TPlFsCh3X68Z2u54Hr1jUEpoJ4I%2Fcs5BcUaG%2BTFm1vSRE%2FDjQfWCQE8sTL1t9%2FcMXWzBWg2uvb5dM831VvjC8IM8VoDKIhYN%2FUOOboyuflcaOb3xveO20jC20M2qHUoLOOb%2FJ%2FhzXcJ%2F0v0rfxHYzQ%3D%3D
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.831340000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
+    !binary "cmVmcmVzaF90b2tlbg==": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        cmVmcmVzaF90b2tlbg==
+      value: Mg%3D%3D%24HbZ%2FFYRplor%2BiLLk7H9p6sMnYOU7syaMrztCiuzTrlfBUUgd8javSVRfvNY%2BlhleWGaUad2R34uaVe5684YdW%2FVa8yLoRBMIhePVi4GydQ7LN4Lcsd4%2FC174HGDKiHL0p3oYLfj9XMjURTaCKzdaog%3D%3D
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.831497000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
+    !binary "ZXhwaXJlc19hdA==": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        ZXhwaXJlc19hdA==
+      value: '1396408864'
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.831639000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
+    !binary "YXBpX2Jhc2VfdXJs": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        YXBpX2Jhc2VfdXJs
+      value: https%3A%2F%2Fapi.beatsmusic.com%2Fapi
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.831780000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
+    !binary "dXNlcl9pZA==": !ruby/object:Mechanize::Cookie
+      name: !binary |-
+        dXNlcl9pZA==
+      value: '139591750279758080'
+      domain: beatsmusic.com
+      for_domain: true
+      path: /
+      secure: false
+      httponly: false
+      expires: 
+      max_age: 
+      created_at: 2014-03-31 23:21:04.831926000 -04:00
+      accessed_at: 2014-03-31 23:21:04.832470000 -04:00
