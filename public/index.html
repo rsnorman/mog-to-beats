@@ -38,41 +38,14 @@
 										<div id="logo">
 											<h1><a href="#">MOG Favorite Exporter</a></h1>
 											<span class="byline">Easy tool to transfer MOG favorites to Beats Music</span>
+											<ul class="actions">
+												<li>
+													<input type="submit" id="begin-button" class="button button-style1" value="Begin" />
+												</li>
+											</ul>
 										</div>
 
-
-									<!-- /Logo -->
-									
-									<!-- Nav -->
-										<!-- <nav id="nav">
-											<ul>
-												<li class="current_page_item"><a href="index.html">Home</a></li>
-												<li>
-													<span>Dropdown</span>
-													<ul>
-														<li><a href="#">Lorem ipsum</a></li>
-														<li><a href="#">Magna veroeros</a></li>
-														<li><a href="#">Etiam nisl</a></li>
-														<li>
-															<span>Sed consequat</span>
-															<ul>
-																<li><a href="#">Lorem dolor</a></li>
-																<li><a href="#">Amet consequat</a></li>
-																<li><a href="#">Magna phasellus</a></li>
-																<li><a href="#">Etiam nisl</a></li>
-																<li><a href="#">Sed feugiat</a></li>
-															</ul>
-														</li>
-														<li><a href="#">Nisl tempus</a></li>
-													</ul>
-												</li>
-												<li><a href="right-sidebar.html">Right Sidebar</a></li>
-												<li><a href="left-sidebar.html">Left Sidebar</a></li>
-												<li><a href="no-sidebar.html">No Sidebar</a></li>
-											</ul>
-										</nav> -->
-									<!-- /Nav -->
-
+										
 								</div>
 							<!-- /Header -->
 
@@ -84,12 +57,11 @@
 		
 		<!-- MOG Wrapper -->
 			<div id="mog-login-wrapper" class="wrapper wrapper-style3">
-				<a class="title" href="javascript:;">Begin</a>
+				<a class="title" href="javascript:;">MOG</a>
 				<div class="container">
 					<div class="row">
 						<div class="12u">
 							
-							<!-- Intro -->
 								<section id="intro">
 									<p class="style1">Log into MOG</p>
 									<form id="mog_login" method="post" action="#">
@@ -105,7 +77,7 @@
 											<div class="row">
 												<div class="12u">
 													<ul class="actions">
-														<li><input type="submit" class="button button-style3" value="Log In" /></li>
+														<li><input type="submit" class="button button-style3" value="Log In" /><div class="button-loader"></div></li>
 													</ul>
 												</div>
 											</div>
@@ -113,8 +85,6 @@
 									</form>
 									
 								</section>
-							<!-- /Intro -->
-							
 						</div>
 					</div>
 				</div>
@@ -127,70 +97,62 @@
 				<div class="container">
 					<div class="row">
 						<div class="12u">
-							
-							<!-- Intro -->
-								<section id="intro">
-									<p class="style1">Log into Beats Music</p>
-									<form id="beats_login" method="post" action="#">
-										<div>
-											<div class="row half">
-												<div class="6u">
-													<input type="email" class="text" name="email" id="beats-email" placeholder="Email" />
-												</div>
-												<div class="6u">
-													<input type="password" class="text" name="password" id="beats-password" placeholder="Password" />
-												</div>
+							<section id="intro">
+								<p class="style1">Log into Beats Music</p>
+								<form id="beats_login" method="post" action="#">
+									<div>
+										<div class="row half">
+											<div class="6u">
+												<input type="email" class="text" name="email" id="beats-email" placeholder="Email" />
 											</div>
-											<div class="row">
-												<div class="12u">
-													<ul class="actions">
-														<li><input type="submit" class="button button-style2" value="Log In" /></li>
-													</ul>
-												</div>
+											<div class="6u">
+												<input type="password" class="text" name="password" id="beats-password" placeholder="Password" />
 											</div>
 										</div>
-									</form>
-									
-								</section>
-							<!-- /Intro -->
-							
+										<div class="row">
+											<div class="12u">
+												<ul class="actions">
+													<li><input type="submit" class="button button-style2" value="Log In" /><div class="button-loader"></div></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</form>
+							</section>
 						</div>
 					</div>
 				</div>
 			</div>
+			<!-- Beats Login -->
 
 			<!-- Transfer Wrapper -->
-			<div id="beats-login-wrapper" class="wrapper wrapper-style3">
+<!-- 			<div id="beats-login-wrapper" class="wrapper wrapper-style3">
 				<a class="title" href="javascript:;">Transfer</a>
 				<div class="container">
 					<div class="row">
 						<div class="12u">
-							
-							<!-- Intro -->
-								<section id="intro">
-									<div class="row half">
-										<div class="6u">
-											<p class="style1">Transfer Favorite Songs</p>
-											<ul class="actions">
-												<li><input id="transfer_songs" type="submit" class="button button-style3" value="Begin" /></li>
-											</ul>
-										</div>
-
-										<div class="6u">
-											<p class="style1">Transfer Favorite Albums</p>
-											<ul class="actions">
-												<li><input id="transfer_albums" type="submit" class="button button-style3" value="Begin" /></li>
-											</ul>
-										</div>
+							<section id="intro">
+								<div class="row half">
+									<div class="6u">
+										<p class="style1">Transfer Favorite Songs</p>
+										<ul class="actions">
+											<li><input id="transfer_songs" type="submit" class="button button-style3" value="Begin" /></li>
+										</ul>
 									</div>
-								</section>
-							<!-- /Intro -->
-							
+
+									<div class="6u">
+										<p class="style1">Transfer Favorite Albums</p>
+										<ul class="actions">
+											<li><input id="transfer_albums" type="submit" class="button button-style3" value="Begin" /></li>
+										</ul>
+									</div>
+								</div>
+							</section>
 						</div>
 					</div>
 				</div>
-			</div>
-		<!-- /Beats Wrapper -->
+			</div> -->
+		<!-- /Transfer Wrapper -->
 		
 
 		<script type="text/javascript">
@@ -248,21 +210,40 @@
 			}
 
 		   $(document).ready(function() {
+		   	var $beginWrapper, $mogWrapper, $beatsWrapper;
+
+		   	$beginWrapper = $('#header-wrapper');
+		   	$mogWrapper = $('#mog-login-wrapper');
+		   	$beatsWrapper = $('#beats-login-wrapper');
+
+
 		   	$('#mog-login-wrapper a').click(function() {
 		   		$('#mog-login-wrapper .container').show();
 		   	});
 
 		   	$('#mog_login').submit(function() {
+		   		var $mogButton;
+		   		$mogButton = $('#mog_login .button');
+		   		$mogButton.parent().addClass('loading');
+		   		$mogButton.val('');
+
 		   		$.post("/mog/login", {
 		   			username: $('#mog-email').val(),
 		   			password: $('#mog-password').val()
 		   		}, function(data) {
 		   			mogUsername = $('#mog-email').val();
+		   			$mogButton.parent().removeClass('loading');
+		   			$beatsWrapper.addClass('visible');
 		   		});
 		   		return false;
 		   	});
 
 		   	$('#beats_login').submit(function() {
+		   		var $beatsButton;
+		   		$beatsButton = $('#beats_login .button');
+		   		$beatsButton.parent().addClass('loading');
+		   		$beatsButton.val('');
+
 		   		$.post("/beats/login", {
 		   			username: $('#beats-email').val(),
 		   			password: $('#beats-password').val()
@@ -276,6 +257,10 @@
 		   	});
 
 		   	$('#transfer_songs').click(transferSongs);
+
+		   	$('#begin-button').click(function() {
+		   		$('#mog-login-wrapper').addClass('visible');
+		   	});
 		   });
 		</script>
 	</body>
