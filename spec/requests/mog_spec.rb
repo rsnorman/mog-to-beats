@@ -16,8 +16,7 @@ describe "MOG" do
   	it "should not log in the user to MOG with bad credentials" do
   		post "/mog/login", {:username => 'rsnorman15@gmail.com', :password => 'badpassword'}, auth_parameters
 
-  		response.should be_ok
-  		JSON.parse(response.body)['success'].should be_false
+  		response.status.should eq 401
   	end
   end
 
@@ -39,11 +38,11 @@ describe "MOG" do
   		response.should be_ok
   		favorites = JSON.parse(response.body)
   		
-  		favorites.size.should eq 519
-		favorites.first["artist_name"].should eq "Japandroids"
-		favorites.first["album_name"].should eq "Post-Nothing"
-		favorites.first["track_name"].should eq "Young Hearts Spark Fire"
-		favorites.first["mog_id"].should eq "30596455"
+  		favorites.size.should be > 519
+		favorites.first["artist_name"].should eq "Liars"
+		favorites.first["album_name"].should eq "Mess"
+		favorites.first["track_name"].should eq "Mess On A Mission"
+		favorites.first["mog_id"].should eq "100562109"
   	end
   end
 
@@ -54,10 +53,10 @@ describe "MOG" do
   		
   		favorites = JSON.parse(response.body)
   		
-  		favorites.size.should eq 64
-		favorites.first["artist_name"].should eq "Perfect Pussy"
-		favorites.first["album_name"].should eq "I"
-		favorites.first["mog_id"].should eq "99584969"
+  		favorites.size.should be > 64
+		favorites.first["artist_name"].should eq "Cloud Nothings"
+		favorites.first["album_name"].should eq "Here And Nowhere Else"
+		favorites.first["mog_id"].should eq "101040151"
   	end
   end
 end

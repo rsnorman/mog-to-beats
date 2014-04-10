@@ -7,15 +7,11 @@
 /*********************************************************************************/
 /* Basic                                                                         */
 /*********************************************************************************/
-	html{
-		height: 100%;
-	}
 	body, input, select, textarea
 	{
 		font-size: 13pt;
 		line-height: 1.75em;
 		letter-spacing: 0.025em;
-		height: 100%;
 	}
 
 	body
@@ -256,10 +252,6 @@
 /*********************************************************************************/
 /* Wrappers                                                                      */
 /*********************************************************************************/
-	
-	#skel-panels-pageWrapper{
-		height: 100%;
-	}
 
 	.wrapper
 	{
@@ -281,13 +273,11 @@
 	#header-wrapper
 	{
 		padding: 0;
-		height: 100%;
 	}
 
 		.homepage #header-wrapper
 		{
-			/*height: 573px;*/
-			height: 100%;
+			height: 573px;
 		}
 
 	#intro-wrapper
@@ -295,123 +285,7 @@
 		padding-bottom: 8em;
 	}
 
-	#mog-login-wrapper{
-		z-index: 1;
-		height: 100%;
-		display: none;
-		position: absolute;
-		width: 100%;
-		-moz-transition: top 1.25s ease-in-out;
-		-webkit-transition: top 1.25s ease-in-out;
-		-o-transition: top 1.25s ease-in-out;
-		-ms-transition: top 1.25s ease-in-out;
-		transition: top 1.25s ease-in-out;
-	}
-
-
-	#mog-login-wrapper.visible{
-		top: 37px;
-		display: block;
-	}
-
-	#beats-login-wrapper{
-		z-index: 2;
-		height: 100%;
-		display: none;
-		position: absolute;
-		width: 100%;
-		-moz-transition: top 1.25s ease-in-out;
-		-webkit-transition: top 1.25s ease-in-out;
-		-o-transition: top 1.25s ease-in-out;
-		-ms-transition: top 1.25s ease-in-out;
-		transition: top 1.25s ease-in-out;
-	}
-
-
-	#beats-login-wrapper.visible{
-		top: 37px;
-		display: block;
-	}
-
-	.button-loader {
-		opacity:0;
-		display: block;
-	    height: 28px;
-	    left: 50%;
-	    margin-left: -14px;
-	    margin-top: -14px;
-	    position: absolute;
-	    top: 50%;
-	    width: 28px;
-	    display: none;
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDplZmZmYjc2Yi0wNGIwLTQwNTUtYTlmZC1jZTE1N2I5YWYxYmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RkFDNUFCQzIzQjU5MTFFMzkzQTJDMjAyNUJBMUEwQzAiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RkFDNUFCQzEzQjU5MTFFMzkzQTJDMjAyNUJBMUEwQzAiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTRCODhCOUEzQjU4MTFFMzkzQTJDMjAyNUJBMUEwQzAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RkFDNUFCQkEzQjU5MTFFMzkzQTJDMjAyNUJBMUEwQzAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4/a0onAAAC/klEQVR42ryWT0wTQRTGZ2sbNfQPvZC2morGREIl8SRpqMZET22MhWBivPSkNy9ePXvk5sEYjxy8qE2xPXiVYlAjhjSNl4qaQIFARaEV6bb1e8sbOllakdLykl+7Mzu73743b2aeVqvVxGGalX40Tdt1g/r6+/vFpVBIszscQXSNgBDoAy6wCK6DD/KZtbU1MT09LTKZjGjkCPVpxo9J0O12i3A4LLxebxjNh+BCkw9+BO6ZO5eWlkQymRSFQmFvQb/fL0aGhx1Wm+0Jmrf+ER0d3ACpRjfL5bJIJBJibm6uuSCJjY6OeiwWy2s0B0zvoCefg/dgHuQ4rE2tUqkYorlcbrdgd3e3iMViDpvNljaJfQP3QRxU95sk5On4+LhYXV01BC0yQWjObNthVMVecftFK2JkeKeIRCI7UTSylLLR5/OFTXNGYlGKzEGXQk9PjxgY2PbD8DA0NKRxNqphvN0OMWmDg4N1QYfTGTSlPs3ZejsXvMvlqgvyolazMd6pnUYKhpS+lhNkP4J9St+7DmhozI6gSxkw3wGxXR52yqRnNbPgT2XQiTYLWlTH5MVnZdDFNh9/1kYhnVT6RtoY6uO0u6nzaFGWgrTTfOwc1JzgqCJWz9KN9fW3+PukDB4D9gOG0sveGR6WSqXqjuCbyUnKogfKA6fAU3CkxUQ5zx98jMNam5qaqoc0m82KfD5PJ/czeYyBa+Ax6NrPaQQuAx+LUVtfXl6uzM7O1gXpYEylUkIvl++iSXe2wG9+mPbVq3skEnl1FtwEJzky1Kfj1F+k+qZa3d4tm5UYL9H0gJKsFsBXQKVHhuok3m+dLODn0NH4DfADLODdM/F4fKthiSGtt7dXRKNRu9VqpfPxiqx/OMxkRX5xkSPxi6+pRPvDYpmKrn9MTEzoUmzPMpHKAo/HQ+fkHXCGqzTydJN3pk3FmxUWzYMZlIkrNEVUx/xXXSrrnEAgYBTCXXb7OXQFeY262RMSXADfwReq4IrFYiGdThuFsJyzhoKHaX8FGAAE4CM/QXg8dQAAAABJRU5ErkJggg==") no-repeat;
-		-webkit-animation: spinner 0.75s infinite linear;
-		-moz-animation-name: spinner 0.75s infinite linear;
-		-o-animation-name: spinner 0.75s infinite linear;
-		animation-name: spinner 0.75s infinite linear;
-		animation: spinner-ie 0.75s infinite linear;
-	}
-
-	.loading .button-loader{
-		opacity: 1;
-		display: block;
-	}
-
-	@-webkit-keyframes spinner {
-  from {
-    -webkit-transform: rotate(0deg); }
-
-  to {
-    -webkit-transform: rotate(359deg); } }
-
-@-moz-keyframes spinner {
-  from {
-    -webkit-transform: rotate(0deg); }
-
-  to {
-    -webkit-transform: rotate(359deg); } }
-
-@keyframes spinner {
-  from {
-    -webkit-transform: rotate(0deg); }
-
-  to {
-    -webkit-transform: rotate(359deg); } }
-
-@-webkit-keyframes spinner-ie {
-  from {
-    transform: rotate(0deg); }
-
-  to {
-    transform: rotate(359deg); } }
-
-@-moz-keyframes spinner-ie {
-  from {
-    transform: rotate(0deg); }
-
-  to {
-    transform: rotate(359deg); } }
-
-@keyframes spinner-ie {
-  from {
-    transform: rotate(0deg); }
-
-  to {
-    transform: rotate(359deg); } }
-/*********************************************************************************/
-/* Header                                                                        */
-/*********************************************************************************/
-
-	#header
-	{
-		/*position: relative;*/
-		height: 100%;
-	}
-
-		.homepage #header
-		{
-			height: 100%;
-		}
+	
 
 /*********************************************************************************/
 /* Logo                                                                          */

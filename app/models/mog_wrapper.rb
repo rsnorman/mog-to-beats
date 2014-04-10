@@ -70,16 +70,27 @@ class MogWrapper
 		end
 	end
 
-	def get_favorite_tracks
-		page = get_favorite_track_page
+	def get_favorite_tracks(start_position = nil, limit = nil)
 		tracks = []
+		if start_position.nil?
+			page = get_favorite_track_page
 
-		while tracks.size < page["total"]
-			tracks = tracks.concat(page["tracks"])
-			page = get_favorite_track_page(page["count"] + page["index"])
+			while tracks.size < page["total"]
+				tracks = tracks.concat(page["tracks"])
+				page = get_favorite_track_page(page["count"] + page["index"])
+			end
+
+			tracks = create_tracks(tracks)
+		else
+			page = get_favorite_track_page(start_position, limit)
+			tracks = create_tracks(page["tracks"])
 		end
+		
+		tracks
+	end
 
-		tracks = tracks.collect do |t|
+	def create_tracks(json_tracks)
+		tracks = json_tracks.collect do |t|
 
 			track = Track.find_by_mog_id(t["track_id"])
 
@@ -93,8 +104,12 @@ class MogWrapper
 
 			track
 		end
-		
+
 		tracks
+	end
+
+	def get_favorite_track_count
+		get_favorite_track_page["total"]
 	end
 
 	def get_favorite_albums
@@ -124,15 +139,19 @@ class MogWrapper
 		albums
 	end
 
+	def get_favorite_album_count
+		get_favorite_album_page["total"]
+	end
+
 	private
 
-	def get_favorite_track_page(index = 0)
-		response = self.agent.get("https://mog.com/v2/bookmarks/tracks.json?explicit=1&index=#{index}&count=100&ts=1395794345&api_token=V3.PpcEwuNWs6emXNGOz2GLsr27FdV3X3eiykcVmJtzBNZAQ-ArAydsPWN5p6-zcRFL&allow_nonstreamable_token=1")
+	def get_favorite_track_page(index = 0, size = 100)
+		response = self.agent.get("https://mog.com/v2/bookmarks/tracks.json?explicit=1&index=#{index}&count=#{size}&ts=1395794345&api_token=V3.PpcEwuNWs6emXNGOz2GLsr27FdV3X3eiykcVmJtzBNZAQ-ArAydsPWN5p6-zcRFL&allow_nonstreamable_token=1")
 		JSON.parse(response.body)
 	end
 
-	def get_favorite_album_page(index = 0)
-		response = self.agent.get("https://mog.com/v2/bookmarks/albums.json?explicit=1&index=#{index}&count=100&ts=1395794345&api_token=V3.PpcEwuNWs6emXNGOz2GLsr27FdV3X3eiykcVmJtzBNZAQ-ArAydsPWN5p6-zcRFL&allow_nonstreamable_token=1")
+	def get_favorite_album_page(index = 0, size = 100)
+		response = self.agent.get("https://mog.com/v2/bookmarks/albums.json?explicit=1&index=#{index}&count=#{size}&ts=1395794345&api_token=V3.PpcEwuNWs6emXNGOz2GLsr27FdV3X3eiykcVmJtzBNZAQ-ArAydsPWN5p6-zcRFL&allow_nonstreamable_token=1")
 		JSON.parse(response.body)
 	end
 	

@@ -16,8 +16,7 @@ describe "Beats" do
   	it "should not log in the user to Beats with bad credentials" do
   		post "/beats/login", {:username => 'rsnorman15@gmail.com', :password => 'badpassword'}, {}
 
-  		response.should be_ok
-  		JSON.parse(response.body)['success'].should be_false
+      response.status.should eq 401
   	end
   end
 
@@ -27,14 +26,57 @@ describe "Beats" do
   	end
 
   	after :each do 
-  		@client.unfavorite(Track.first)
+      @client.unfavorite(Track.first)
+  		@client.remove_from_library(Track.first)
   	end
 
   	it "should favorite all tracks saved in mog" do
   		post "/beats/favorite_tracks", {:limit => 1}, auth_parameters
 
+      tracks = JSON.parse(response.body)
+
+      tracks["favorited_tracks"].size.should eq 1
+      tracks["favorited_tracks"].first["track_name"].should eq "Mess On A Mission"
+      # tracks["missing_tracks"].size.should eq 0
+      tracks["error_tracks"].size.should eq 0
   		@client.is_favorited?(Track.first).should be true
   	end
+
+    it "should add all tracks to beats library saved in mog" do
+      post "/beats/favorite_tracks", {:limit => 1}, auth_parameters
+
+      tracks = JSON.parse(response.body)
+
+      tracks["favorited_tracks"].size.should eq 1
+      tracks["favorited_tracks"].first["track_name"].should eq "Mess On A Mission"
+      # tracks["missing_tracks"].size.should eq 0
+      tracks["error_tracks"].size.should eq 0
+      @client.is_in_library?(Track.first).should be true
+    end
+
+    it "should favorite all tracks saved in mog from start position" do
+      post "/beats/favorite_tracks", {:start_position => 1, :limit => 1}, auth_parameters
+
+      tracks = JSON.parse(response.body)
+
+      tracks["favorited_tracks"].size.should eq 1
+      tracks["favorited_tracks"].first["track_name"].should eq "Seasons (Waiting On You)"
+      # tracks["missing_tracks"].size.should eq 0
+      tracks["error_tracks"].size.should eq 0
+      @client.is_favorited?(Track.first).should be true
+    end
+
+    it "should add all tracks to beats library saved in mog from start position" do
+      post "/beats/favorite_tracks", {:start_position => 1, :limit => 1}, auth_parameters
+
+      tracks = JSON.parse(response.body)
+
+      tracks["favorited_tracks"].size.should eq 1
+      tracks["favorited_tracks"].first["track_name"].should eq "Seasons (Waiting On You)"
+      # tracks["missing_tracks"].size.should eq 0
+      tracks["error_tracks"].size.should eq 0
+      @client.is_in_library?(Track.first).should be true
+    end
   end
 
   describe "/favorite_albums" do

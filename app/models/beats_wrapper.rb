@@ -48,21 +48,33 @@ class BeatsWrapper
 	end
 
 	def search(item)
-		url = "https://api.beatsmusic.com/api/search/federated?q="
-		query = item.artist_name
+		query = item.artist_name.downcase.gsub('!', '')
 		if item.is_a?(Track)
-			query = "#{query} #{item.track_name}".gsub(' ', '+')
-			response = RestClient.get("#{url}#{query}", get_authorization_headers)
-			track = JSON.parse(response.body)["data"]["tracks"].first
-			
-			if (track["detail"].include?(item.artist_name) || item.artist_name.include?(track["detail"])) && (track["display"].include?(item.track_name) || item.track_name.include?(track["display"]))
-				item.beats_id = track["id"]
-				item.save
+			track_name = item.track_name.downcase.gsub(/(\([\s\S]*\))/, '').gsub('&', 'and')
+			query = "#{query} #{track_name}"
+
+			item = match(query, item.artist_name, item.track_name, item)
+
+			if item.beats_id.nil? && item.artist_name.downcase.include?('and')
+				query = "#{item.artist_name.split(/and/i).first} #{track_name}"
+				query = CGI.escape(query)
+
+				item = match(query, item.artist_name, item.track_name, item)
 			end
+
+			if item.beats_id.nil?
+				query = "#{track_name}"
+				query = CGI.escape(query)
+
+				item = match(query, item.artist_name, track_name, item)
+			end
+
+
 		elsif item.is_a?(Album)
+			url = "https://api.beatsmusic.com/api/search?q="
 			query = "#{query} #{item.album_name}".gsub(' ', '+')
-			response = RestClient.get("#{url}#{query}", get_authorization_headers)
-			album = JSON.parse(response.body)["data"]["albums"].first
+			response = RestClient.get("#{url}#{query}&type=album", get_authorization_headers)
+			album = JSON.parse(response.body)["data"].first
 			
 			if (album["detail"].include?(item.artist_name) || item.artist_name.include?(album["detail"])) && (album["display"].include?(item.album_name) || item.album_name.include?(album["display"]))
 				item.beats_id = album["id"]
@@ -70,6 +82,26 @@ class BeatsWrapper
 			end
 		end
 			
+		item
+	end
+
+	def match(query, artist_name, track_name, item)
+		url = "https://api.beatsmusic.com/api/search?q="
+		artist_name = artist_name.downcase
+		track_name = track_name.downcase
+		query = CGI.escape(query)
+		response = RestClient.get("#{url}#{query}&type=track", get_authorization_headers)
+		
+		tracks = JSON.parse(response.body)["data"]
+
+		tracks.each do |track|
+			if (track && track["detail"].downcase.include?(artist_name) || artist_name.include?(track["detail"].downcase)) && (track["display"].downcase.gsub('&', 'and').include?(track_name) || track_name.include?(track["display"].downcase.gsub('&', 'and')))
+				item.beats_id = track["id"]
+				item.save
+				break
+			end
+		end
+
 		item
 	end
 
@@ -85,6 +117,32 @@ class BeatsWrapper
 		}
 
 		response = RestClient.put(url, params, get_authorization_headers)
+	end
+
+	def add_to_library(item)
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/mymusic/#{item.beats_id}"
+		params = {
+			:id => 	item.beats_id,
+		}
+
+		response = RestClient.put(url, params, get_authorization_headers)
+	end
+
+	def remove_from_library(item)
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/mymusic/#{item.beats_id}"
+		
+		response = RestClient.delete(url, get_authorization_headers)
+	rescue
+		nil
+	end
+
+	def is_in_library?(item)
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/mymusic/tracks?limit=200"
+		response = RestClient.get(url, get_authorization_headers)
+	
+		!JSON.parse(response.body)["data"].detect{|x| x["id"] == item.beats_id}.nil?
+	rescue Exception => e
+		false
 	end
 
 	def unfavorite(item)

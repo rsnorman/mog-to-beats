@@ -10,7 +10,11 @@ class MogController < ApplicationController
 		@agent = MogWrapper.new
 		success = @agent.login(params[:username], params[:password])
 
-		render :json => {:success => success}, :status => 200
+		if success
+			render :json => {:success => true}, :status => 200
+		else
+			render :nothing => true, :status => 401
+		end
 	end
 
 	def playlists
@@ -23,5 +27,13 @@ class MogController < ApplicationController
 
 	def favorite_albums
 		respond_with @agent.get_favorite_albums
+	end
+
+	def favorite_track_count
+		render :json => {:count => @agent.get_favorite_track_count}
+	end
+
+	def favorite_album_count
+		render :json => {:count => @agent.get_favorite_album_count}
 	end
 end

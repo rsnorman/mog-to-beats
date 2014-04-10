@@ -296,6 +296,10 @@
 		padding: 6em 2em 6em 2em;
 	}
 
+	#logo{
+		margin-top: 100px;
+	}
+
 	#footer-wrapper
 	{
 		padding-top: 3em;

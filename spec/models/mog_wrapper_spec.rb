@@ -58,11 +58,11 @@ describe MogWrapper do
 		it "should return a list of favorite tracks" do
 			favorites = @client.get_favorite_tracks
 
-			favorites.size.should eq 519
-			favorites.first.artist_name.should eq "Japandroids"
-			favorites.first.album_name.should eq "Post-Nothing"
-			favorites.first.track_name.should eq "Young Hearts Spark Fire"
-			favorites.first.mog_id.should eq "30596455"
+			favorites.size.should be > 519
+			favorites.first.artist_name.should eq "Liars"
+			favorites.first.album_name.should eq "Mess"
+			favorites.first.track_name.should eq "Mess On A Mission"
+			favorites.first.mog_id.should eq "100562109"
 
 		end
 	end
@@ -71,10 +71,10 @@ describe MogWrapper do
 		it "should return a list of favorites" do
 			favorites = @client.get_favorite_albums
 
-			favorites.size.should eq 64
-			favorites.first.artist_name.should eq "Perfect Pussy"
-			favorites.first.album_name.should eq "I"
-			favorites.first.mog_id.should eq "99584969"
+			favorites.size.should be > 64
+			favorites.first.artist_name.should eq "Cloud Nothings"
+			favorites.first.album_name.should eq "Here And Nowhere Else"
+			favorites.first.mog_id.should eq "101040151"
 
 		end
 	end

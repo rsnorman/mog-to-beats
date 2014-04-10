@@ -13,15 +13,18 @@
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700,900" rel="stylesheet" />
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
 		<script src="js/jquery.min.js"></script>
-		<script src="js/jquery.dropotron.min.js"></script>
 		<script src="js/config.js"></script>
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
+		<script src="js/main.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-desktop.css" />
 		</noscript>
+
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/main.css" />
 	</head>
 	<body class="homepage">
 
@@ -62,29 +65,39 @@
 					<div class="row">
 						<div class="12u">
 							
-								<section id="intro">
-									<p class="style1">Log into MOG</p>
-									<form id="mog_login" method="post" action="#">
-										<div>
-											<div class="row half">
-												<div class="6u">
-													<input type="email" class="text" name="email" id="mog-email" placeholder="Email" />
-												</div>
-												<div class="6u">
-													<input type="password" class="text" name="password" id="mog-password" placeholder="Password" />
-												</div>
+							<section id="intro">
+								<p class="style1">Log into MOG</p>
+								<form id="mog_login" method="post" action="/mog/login">
+									<div>
+										<div class="row half">
+											<div class="6u">
+												<input type="email" class="text" name="email" id="mog-email" placeholder="Email" />
 											</div>
-											<div class="row">
-												<div class="12u">
-													<ul class="actions">
-														<li><input type="submit" class="button button-style3" value="Log In" /><div class="button-loader"></div></li>
-													</ul>
-												</div>
+											<div class="6u">
+												<input type="password" class="text" name="password" id="mog-password" placeholder="Password" />
 											</div>
 										</div>
-									</form>
-									
-								</section>
+										<div class="row">
+											<div class="12u">
+												<ul class="actions">
+													<li><input type="submit" class="button button-style3" value="Log In" /><div class="button-loader"></div></li>
+												</ul>
+											</div>
+										</div>
+										<div class="row login-error">
+											<div class="12u">
+												Email and password combination was incorrect.
+											</div>
+										</div>
+										<div class="row error">
+											<div class="12u">
+												There was an error logging in. Please try again.
+											</div>
+										</div>
+									</div>
+								</form>
+								
+							</section>
 						</div>
 					</div>
 				</div>
@@ -99,7 +112,7 @@
 						<div class="12u">
 							<section id="intro">
 								<p class="style1">Log into Beats Music</p>
-								<form id="beats_login" method="post" action="#">
+								<form id="beats_login" method="post" action="/beats/login">
 									<div>
 										<div class="row half">
 											<div class="6u">
@@ -116,6 +129,16 @@
 												</ul>
 											</div>
 										</div>
+										<div class="row login-error">
+											<div class="12u">
+												Email and password combination was incorrect.
+											</div>
+										</div>
+										<div class="row error">
+											<div class="12u">
+												There was an error logging in. Please try again.
+											</div>
+										</div>
 									</div>
 								</form>
 							</section>
@@ -126,22 +149,53 @@
 			<!-- Beats Login -->
 
 			<!-- Transfer Wrapper -->
-<!-- 			<div id="beats-login-wrapper" class="wrapper wrapper-style3">
+			<div id="transfer-wrapper" class="wrapper wrapper-style3">
 				<a class="title" href="javascript:;">Transfer</a>
 				<div class="container">
 					<div class="row">
 						<div class="12u">
 							<section id="intro">
 								<div class="row half">
-									<div class="6u">
+									<div class="6u loading-songs">
 										<p class="style1">Transfer Favorite Songs</p>
+										<div class='loading-music'>
+											<p>Grabbing Favorite Songs</p>
+											<div class="button-loader"></div>
+										</div>
+
+										<div class='loaded-music'>
+											<p>Found <span class="song-count"></span> Songs</p>
+										</div>
+										<div class='transferring-music'>
+											<p>Transfered <span class="song-success-count">0</span> of <span class="song-count"></span> Songs</p>
+											<div class="button-loader"></div>
+										</div>
+
+										<div class='error-tracks'>
+											<p>
+												<span class="song-error-count"></span> Songs Could Not Be Transfered
+												<a href="javascript:;" class="view-error-songs">view</a>
+											</p>
+											<ul class='error-track-container'>
+											</ul>
+										</div>
+
 										<ul class="actions">
 											<li><input id="transfer_songs" type="submit" class="button button-style3" value="Begin" /></li>
 										</ul>
 									</div>
 
-									<div class="6u">
+									<div class="6u loading-albums">
 										<p class="style1">Transfer Favorite Albums</p>
+										<div class='loading-music'>
+											<p>Grabbing Favorite Albums</p>
+											<div class="button-loader"></div>
+										</div>
+										
+										<div class='loaded-music'>
+											<p>Found <span class="album-count"></span> Albums</p>
+										</div>
+
 										<ul class="actions">
 											<li><input id="transfer_albums" type="submit" class="button button-style3" value="Begin" /></li>
 										</ul>
@@ -151,117 +205,8 @@
 						</div>
 					</div>
 				</div>
-			</div> -->
+			</div>
 		<!-- /Transfer Wrapper -->
 		
-
-		<script type="text/javascript">
-			var mogUsername, beatsUsername, favoriteSongs, favoriteAlbums;
-
-			function getFavoriteSongCount() {
-				$.ajax({
-					url: "/mog/favorite_tracks",
-					headers: {
-						MOG_USER_NAME: mogUsername
-					},
-					success: function(songs) {
-						favoriteSongs = songs;
-					}
-				});
-			}
-
-			function getFavoriteAlbumCount() {
-				$.ajax({
-					url: "/mog/favorite_albums",
-					headers: {
-						MOG_USER_NAME: mogUsername
-					},
-					success: function(albums) {
-						favoriteAlbums = albums;
-					}
-				});
-			}
-
-			var currentPage, limit;
-			limit = 10;
-			currentPosition = 0;
-			function transferSongs() {
-				$.ajax({
-					url: '/beats/favorite_tracks',
-					method: 'POST',
-					data: {
-						limit: limit,
-						start_position: currentPosition
-					},
-					headers: {
-						MOG_USER_NAME: mogUsername,
-						BEATS_USER_NAME: beatsUsername
-					},
-					success: function(data) {
-						if (currentPosition + limit <= favoriteSongs.length) {
-							currentPosition = currentPosition + limit;
-
-							setTimeout(function() {
-								transferSongs();
-							}, 1000);
-						}
-					}
-				});
-			}
-
-		   $(document).ready(function() {
-		   	var $beginWrapper, $mogWrapper, $beatsWrapper;
-
-		   	$beginWrapper = $('#header-wrapper');
-		   	$mogWrapper = $('#mog-login-wrapper');
-		   	$beatsWrapper = $('#beats-login-wrapper');
-
-
-		   	$('#mog-login-wrapper a').click(function() {
-		   		$('#mog-login-wrapper .container').show();
-		   	});
-
-		   	$('#mog_login').submit(function() {
-		   		var $mogButton;
-		   		$mogButton = $('#mog_login .button');
-		   		$mogButton.parent().addClass('loading');
-		   		$mogButton.val('');
-
-		   		$.post("/mog/login", {
-		   			username: $('#mog-email').val(),
-		   			password: $('#mog-password').val()
-		   		}, function(data) {
-		   			mogUsername = $('#mog-email').val();
-		   			$mogButton.parent().removeClass('loading');
-		   			$beatsWrapper.addClass('visible');
-		   		});
-		   		return false;
-		   	});
-
-		   	$('#beats_login').submit(function() {
-		   		var $beatsButton;
-		   		$beatsButton = $('#beats_login .button');
-		   		$beatsButton.parent().addClass('loading');
-		   		$beatsButton.val('');
-
-		   		$.post("/beats/login", {
-		   			username: $('#beats-email').val(),
-		   			password: $('#beats-password').val()
-		   		}, function(data) {
-		   			beatsUsername = $('#beats-email').val();
-
-		   			getFavoriteSongCount();
-		   			getFavoriteAlbumCount();
-		   		});
-		   		return false;
-		   	});
-
-		   	$('#transfer_songs').click(transferSongs);
-
-		   	$('#begin-button').click(function() {
-		   		$('#mog-login-wrapper').addClass('visible');
-		   	});
-		   });
-		</script>
 	</body>
 </html>

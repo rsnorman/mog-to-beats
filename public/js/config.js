@@ -27,14 +27,14 @@ jQuery(function() {
 	jQuery.browser={};(function(){jQuery.browser.msie=false;jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)\./)){jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
 
 	// Desktop
-		jQuery('#nav > ul').dropotron({ 
-			offsetY: -20,
-			offsetX: -1,
-			mode: 'fade',
-			noOpenerFade: true,
-			alignment: 'center',
-			detach: false
-		});
+		// jQuery('#nav > ul').dropotron({ 
+		// 	offsetY: -20,
+		// 	offsetX: -1,
+		// 	mode: 'fade',
+		// 	noOpenerFade: true,
+		// 	alignment: 'center',
+		// 	detach: false
+		// });
 
 	// Forms (IE <= 9 only)
 		if (jQuery.browser.msie && jQuery.browser.version <= 9)

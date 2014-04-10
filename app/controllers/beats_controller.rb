@@ -14,7 +14,11 @@ class BeatsController < ApplicationController
 		@beats_agent = BeatsWrapper.new
 		success = @beats_agent.login(params[:username], params[:password])
 
-		render :json => {:success => success}, :status => 200
+		if success
+			render :json => {:success => true}, :status => 200
+		else
+			render :nothing => true, :status => 401
+		end
 	end
 
 	def create_playlists
@@ -31,8 +35,9 @@ class BeatsController < ApplicationController
 
 	def favorite_tracks
 		start_position = (params[:start_position] || 0).to_i
-		end_position = start_position + (params[:limit] || 10).to_i
-		tracks = mog_agent.get_favorite_tracks[start_position..end_position]
+		# end_position = start_position + (params[:limit] || 10).to_i
+		limit = (params[:limit] || 10).to_i
+		tracks = mog_agent.get_favorite_tracks(start_position, limit)
 
 		favorited_tracks = []
 		missing_tracks = []
@@ -44,9 +49,10 @@ class BeatsController < ApplicationController
 
 				unless track.beats_id.nil?
 					beats_agent.favorite(track)
+					beats_agent.add_to_library(track)
 					favorited_tracks << track
 				else
-					missing_tracks << track
+					error_tracks << track
 				end
 			rescue
 				error_tracks << track
