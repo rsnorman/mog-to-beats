@@ -1,30 +1,22 @@
 (function($) {
-	var mogUsername, beatsUsername, favoriteSongCount, favoriteAlbumCount;
+	var mogUsername, beatsUsername, favoriteCount;
 	var $beginWrapper, $mogWrapper, $beatsWrapper, $transferWrapper;
+	var mogId, beatsUserId, beatsAuthToken;
 
-	function getFavoriteSongCount(success) {
+	favoriteCount = {};
+
+	function getFavoriteCount(type, success) {
 		$.ajax({
-			url: "/mog/favorite_tracks/count",
+			url: "/mog/favorite_" + type + "s/count",
 			headers: {
-				MOG_USER_NAME: mogUsername
+				MOG_ID: mogId || "V3.PpcEwuNWs6emXNGOz2GLsr27FdV3X3eiykcVmJtzBNZAQ-ArAydsPWN5p6-zcRFL"
 			},
-			success: function(songCount) {
-				success && success(songCount.count);
+			success: function(response) {
+				success && success(response.count);
 			}
 		});
 	}
 
-	function getFavoriteAlbumCount(success) {
-		$.ajax({
-			url: "/mog/favorite_albums/count",
-			headers: {
-				MOG_USER_NAME: mogUsername
-			},
-			success: function(albumCount) {
-				success && success(albumCount.count);
-			}
-		});
-	}
 
 	function slideUp($panel) {
 		$panel.css({
@@ -57,7 +49,7 @@
 					password: $form.find('[type="password"]').val()
 				},
 				success: function(data) {
-
+					console.log(data);
 					$button.parent().removeClass('loading');
 
 					success && success(data);
@@ -81,54 +73,61 @@
 		});
 	}
 
-	var currentPage, limit, totalSuccessCount, totalErrorCount;
+	var currentMusicType, currentMusicLabel, currentPage, limit, totalSuccessCount, totalErrorCount;
 	limit = 10;
+	currentPage = 0;
 	currentPosition = 0;
 	totalSuccessCount = 0;
 	totalErrorCount = 0;
 
-	function transferSongs(success) {
-		$errorTrackContainer = $('.error-track-container');
+	function transferMusic(success) {
+		$errorTrackContainer = $('.error-music-container');
 		$transferWrapper.find('.transferring-music').show();
-		$transferWrapper.find('.loading-songs .loaded-music').hide();
-		$transferWrapper.find('.loading-songs .button').css({
+		$transferWrapper.find('.loading-music-container .loaded-music').hide();
+		$('#begin-music-transfer').css({
+			opacity: 0
+		});
+		$('#transfer-more').css({
 			opacity: 0
 		});
 
 		$.ajax({
-			url: '/beats/favorite_tracks',
+			url: '/beats/favorite_' + currentMusicType + 's',
 			method: 'POST',
 			data: {
 				limit: limit,
 				start_position: currentPosition
 			},
 			headers: {
-				MOG_USER_NAME: $mogWrapper.find('[type="email"]').val(),
-				BEATS_USER_NAME: $beatsWrapper.find('[type="email"]').val()
+				MOG_ID: mogId || "V3.PpcEwuNWs6emXNGOz2GLsr27FdV3X3eiykcVmJtzBNZAQ-ArAydsPWN5p6-zcRFL",
+				BEATS_USER_ID: beatsUserId || "139591750279758080",
+				BEATS_AUTH_TOKEN: beatsAuthToken || "Mg%3D%3D%246%2FJhhYwCEf%2BhGKR7GGiiDe1%2BFLGQI%2BwIiT6ZwZBdIEkj398CFPnrx09AAOfs1jw6CSFaQFljRNIt9xcom%2B%2FXwg1PUi%2FuWrFEQiMmIyvcmwL4v%2BoFmE%2FV5YqINtY6xpC9Ch%2F72IIgOcSF1iO1qMRMcg%3D%3D"
 			},
 			success: function(data) {
-				totalSuccessCount += data['favorited_tracks'].length
-				$('.song-success-count').text(totalSuccessCount);
-				totalErrorCount += data['error_tracks'].length;
+				totalSuccessCount += data['favorited_' + currentMusicType + 's'].length
+				$('.music-success-count').text(totalSuccessCount);
+				totalErrorCount += data['error_' + currentMusicType + 's'].length;
 
 				if (totalErrorCount > 0) {
 					$('.error-tracks').slideDown();
-					$('.song-error-count').text(totalErrorCount);
-					for (var i = 0; i < data['error_tracks'].length; i++) {
-						$errorTrackContainer.append($('<li></li>').text([data['error_tracks'][i].artist_name, ' - ',
-							data['error_tracks'][i].track_name
-						].join('')).hide().slideDown());
+					$('.music-error-count').text(totalErrorCount);
+					for (var i = 0; i < data['error_' + currentMusicType + 's'].length; i++) {
+						$errorTrackContainer.append($('<li></li>').text(data['error_' + currentMusicType + 's'][i].title).hide().slideDown());
 					}
 				}
 
-				if (currentPosition + limit <= favoriteSongCount) {
+				if (currentPosition + limit <= favoriteCount[currentMusicType]) {
 					currentPosition = currentPosition + limit;
 
 					setTimeout(function() {
-						transferSongs();
+						transferMusic();
 					}, 1000);
 				} else {
 					$('.transferring-music .button-loader').slideUp();
+					$('#begin-music-transfer').hide();
+					$('#transfer-more').show().css({
+						opacity: 1
+					});
 				}
 			}
 		});
@@ -145,43 +144,81 @@
 			slideUp($mogWrapper);
 		});
 
-		login($('#mog_login'), function() {
+		login($('#mog_login'), function(data) {
+			mogId = data.mogid;
 			slideUp($beatsWrapper);
 		});
 
-		login($('#beats_login'), function() {
+		login($('#beats_login'), function(data) {
+			beatsUserId = data.user_id
+			beatsAuthToken = data.auth_token
 			slideUp($transferWrapper);
-			getFavoriteSongCount(function(songCount) {
-				favoriteSongCount = songCount;
-				$transferWrapper.find('.loading-songs .loading-music').slideUp();
-				$transferWrapper.find('.loading-songs .loaded-music').slideDown(400, function() {
-					$transferWrapper.find('.loading-songs .button').css({
-						opacity: 1
-					});
-				})
-
-				$transferWrapper.find('.song-count').text(favoriteSongCount);
-			});
-			getFavoriteAlbumCount(function(albumCount) {
-				favoriteAlbumCount = albumCount;
-				$transferWrapper.find('.loading-albums .loading-music').slideUp();
-				$transferWrapper.find('.loading-albums .loaded-music').slideDown(400, function() {
-					$transferWrapper.find('.loading-albums .button').css({
-						opacity: 1
-					});
-				})
-
-
-				$transferWrapper.find('.album-count').text(albumCount);
-			});
 		});
 
 
-		$('#transfer_songs').click(transferSongs);
+		$('#begin-music-transfer').click(transferMusic);
 
-		$('.view-error-songs').click(function() {
+		$('#transfer-more').click(function() {
+			$('#transfer-progress').fadeOut(500, function() {
+				$('#select-music-type').fadeIn();
+				$('#transfer-more').hide();
+			});
+		});
+
+		$('.view-error-music').click(function() {
 			$('.error-track-container').slideDown();
-		})
+		});
+
+		function showTransferDiv(type, title) {
+
+			currentMusicType = type;
+			currentMusicLabel = title;
+			currentPage = 0;
+			currentPosition = 0;
+			totalSuccessCount = 0;
+			totalErrorCount = 0;
+
+			$('#select-music-type').fadeOut(500, function() {
+				$('#transfer-progress').fadeIn();
+			});
+
+			$('#transfer-progress .music-type').text(title);
+
+			$('.transferring-music').hide();
+			$('.error-music').hide();
+			$('#begin-music-transfer').css({
+				opacity: 0
+			}).show();
+			$('#transfer-more').css({
+				opacity: 0
+			}).show();
+			$('.music-success-count').text(0);
+			$('.music-error-count').text(0);
+			$('.transferring-music .button-loader').show();
+			$transferWrapper.find('.loading-music-container .loaded-music').hide();
+
+			$transferWrapper.find('.loading-music-container .loading-music').show();
+
+			getFavoriteCount(type, function(count) {
+				favoriteCount[type] = count;
+				$transferWrapper.find('.loading-music-container .loading-music').slideUp();
+				$transferWrapper.find('.loading-music-container .loaded-music').slideDown(400, function() {
+					$('#begin-music-transfer').css({
+						opacity: 1
+					});
+
+					$('#transfer-more').css({
+						opacity: 1
+					});
+				});
+
+				$transferWrapper.find('.music-count').text(favoriteCount[type]);
+			});
+		}
+
+		$('.transfer-choose').click(function() {
+			showTransferDiv($(this).data().musicType, $(this).data().title);
+		});
 
 	});
 })(jQuery);

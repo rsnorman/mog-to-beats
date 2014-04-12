@@ -5,13 +5,19 @@ require 'rest-client'
 class BeatsWrapper
 
 	BEATS_URL = "http://www.beatsmusic.com/"
+	BEATS_TEST_AUTH_TOKEN = "Mg%3D%3D%246%2FJhhYwCEf%2BhGKR7GGiiDe1%2BFLGQI%2BwIiT6ZwZBdIEkj398CFPnrx09AAOfs1jw6CSFaQFljRNIt9xcom%2B%2FXwg1PUi%2FuWrFEQiMmIyvcmwL4v%2BoFmE%2FV5YqINtY6xpC9Ch%2F72IIgOcSF1iO1qMRMcg%3D%3D"
+	BEATS_TEST_USER_ID = "139591750279758080"
 
 	attr_accessor :agent
 	attr_reader :is_logged_in
+	attr_reader :auth_token
+	attr_reader :user_id
 
-	def initialize(username = nil)
-		if username
-			agent.cookie_jar.load(Rails.root.join("cookie_jars","#{username}-beats.cookies"))
+	def initialize(user_id = nil, auth_token = nil)
+		if auth_token
+			# agent.cookie_jar.load(Rails.root.join("cookie_jars","#{username}-beats.cookies"))
+			@user_id = user_id
+			@auth_token = auth_token
 			set_authorization_headers
 			@is_logged_in = true
 		end
@@ -38,10 +44,11 @@ class BeatsWrapper
 
 		# Returns true if successfully logged in
 		if self.agent.page.uri.to_s == "https://listen.beatsmusic.com/"
+			@auth_token = self.agent.cookies.detect{|x| x.name == "access_token"}.value rescue nil
+			@user_id = self.agent.cookies.detect{|x| x.name == "user_id"}.value rescue nil
 			set_authorization_headers
-			self.agent.cookie_jar.save(Rails.root.join("cookie_jars","#{username}-beats.cookies"), :session => true)
-			@is_logged_in = true
-			true
+			# self.agent.cookie_jar.save(Rails.root.join("cookie_jars","#{username}-beats.cookies"), :session => true)
+			@is_logged_in = !@auth_token.nil? && !@user_id.nil?
 		else
 			false
 		end
@@ -80,6 +87,17 @@ class BeatsWrapper
 				item.beats_id = album["id"]
 				item.save
 			end
+
+		elsif item.is_a?(Artist)
+			url = "https://api.beatsmusic.com/api/search?q="
+			query = "#{query} #{item.artist_name}".gsub(' ', '+')
+			response = RestClient.get("#{url}#{query}&type=artist", get_authorization_headers)
+			artist = JSON.parse(response.body)["data"].first
+			
+			if (artist["detail"].include?(item.artist_name) || item.artist_name.include?(artist["detail"])) && (artist["display"].include?(item.artist_name) || item.artist_name.include?(artist["display"]))
+				item.beats_id = artist["id"]
+				item.save
+			end
 		end
 			
 		item
@@ -109,7 +127,7 @@ class BeatsWrapper
 		url = "https://api.beatsmusic.com/api/users/#{user_id}/ratings/#{item.beats_id}"
 		params = {
 			:id => 	item.beats_id,
-			:rated => { :display => "", :id => item.beats_id, :ref_type => item.is_a?(Track) ? "track" : "album" },
+			:rated => { :display => "", :id => item.beats_id, :ref_type => item.class.to_s.downcase },
 			:rating => 1,
 			:type => "rating",
 			:updated_at => Time.now.to_i,
@@ -137,10 +155,32 @@ class BeatsWrapper
 	end
 
 	def is_in_library?(item)
-		url = "https://api.beatsmusic.com/api/users/#{user_id}/mymusic/tracks?limit=200"
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/mymusic/#{item.class.to_s.downcase.pluralize}?limit=200"
 		response = RestClient.get(url, get_authorization_headers)
 	
 		!JSON.parse(response.body)["data"].detect{|x| x["id"] == item.beats_id}.nil?
+	rescue Exception => e
+		false
+	end
+
+	def follow(artist)
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/follows/#{artist.beats_id}"
+		params = {
+			:id => 	artist.beats_id,
+		}
+		response = RestClient.put(url, params, get_authorization_headers)
+	end
+
+	def unfollow(artist)
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/follows/#{artist.beats_id}"
+		response = RestClient.delete(url, get_authorization_headers)
+	end
+
+	def is_followed?(artist)
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/follows/#{artist.beats_id}"
+		response = RestClient.get(url, get_authorization_headers)
+
+		JSON.parse(response.body)["data"]["object"]["id"] == artist.beats_id
 	rescue Exception => e
 		false
 	end
@@ -168,6 +208,23 @@ class BeatsWrapper
 		params = {
 			:id => 	album.beats_id,
 			:rated => { :display => "", :id => album.beats_id, :ref_type => "album" },
+			:rating => 1,
+			:type => "rating",
+			:updated_at => Time.now.to_i,
+			:user_id => user_id
+		}
+
+		response = RestClient.put(url, params, get_authorization_headers)
+
+		JSON.parse(response)["data"]["code"] == "OK"
+	end
+
+	def favorite_artist(artist)
+		url = "https://api.beatsmusic.com/api/users/#{user_id}/ratings/#{artist.beats_id}"
+
+		params = {
+			:id => 	artist.beats_id,
+			:rated => { :display => "", :id => artist.beats_id, :ref_type => "artist" },
 			:rating => 1,
 			:type => "rating",
 			:updated_at => Time.now.to_i,
@@ -210,34 +267,9 @@ class BeatsWrapper
 	
 	private
 
-	# def put(uri, query = {}, headers = {})
-	# 	node = {}
-	# 	# Create a fake form
-	# 	class << node
-	# 		def search(*args); []; end
-	# 	end
-	# 	node['method'] = 'PUT'
-	# 	node['enctype'] = 'application/x-www-form-urlencoded'
-
-	# 	form = Mechanize::Form.new(node)
-
-	# 	query.each { |k, v|
-	# 	  form.fields << Mechanize::Form::Field.new({'name' => k.to_s},v)
-	# 	}
-
-	# 	self.agent.send(:post_form, uri, form, headers)
-	# end
-
-	def user_id
-		self.agent.cookies.detect{|x| x.name == "user_id"}.value
-	rescue
-		raise "User ID not found"
-	end
-
 	def get_authorization_headers
-		auth_token = self.agent.cookies.detect{|x| x.name == "access_token"}.value
 		{
-			'Authorization' => "Bearer #{URI.unescape(auth_token)}",
+			'Authorization' => "Bearer #{URI.unescape(@auth_token)}",
 			"Accept" =>	"application/json, text/javascript, */*; q=0.01",
 			"Accept-Encoding" =>	"gzip, deflate",
 			"Accept-Language" =>	"en-US,en;q=0.5",

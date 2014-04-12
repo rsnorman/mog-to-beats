@@ -5,12 +5,15 @@ MogToBeats::Application.routes.draw do
   match "mog/playlists" => "mog#playlists", :via => :get
   match "mog/favorite_tracks" => "mog#favorite_tracks", :via => :get
   match "mog/favorite_albums" => "mog#favorite_albums", :via => :get
+  match "mog/favorite_artists" => "mog#favorite_artists", :via => :get
   match "mog/favorite_tracks/count" => "mog#favorite_track_count", :via => :get
   match "mog/favorite_albums/count" => "mog#favorite_album_count", :via => :get
+  match "mog/favorite_artists/count" => "mog#favorite_artist_count", :via => :get
 
   match "beats/login" => "beats#login", :via => :post
   match "beats/favorite_tracks" => "beats#favorite_tracks", :via => :post
   match "beats/favorite_albums" => "beats#favorite_albums", :via => :post
+  match "beats/favorite_artists" => "beats#favorite_artists", :via => :post
 
 
   # The priority is based upon order of creation:

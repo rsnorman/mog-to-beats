@@ -2,27 +2,26 @@ require 'spec_helper'
 
 describe BeatsWrapper do
 	before :all do
-		@client = BeatsWrapper.new
-		@client.login('rsnorman15@gmail.com', 'wambam15')
+		@client = BeatsWrapper.new(BeatsWrapper::BEATS_TEST_USER_ID, BeatsWrapper::BEATS_TEST_AUTH_TOKEN)
 	end
 
 	describe "initialize" do
 		it "should create an agent with cookies loaded if cookie jar path is provided" do
-			client = BeatsWrapper.new(Rails.root.join('cookie_jars', 'rsnorman15@gmail.com'))
-			client.is_logged_in.should be_true
+			@client.is_logged_in.should be_true
 			
 			track = Track.create(:track_name => "Wet Hair", 
 				:album_name => "Post-Nothing", 
 				:artist_name => "Japandroids",
 				:mog_id => "30596455")
-			beats_track = client.search(track)
+			beats_track = @client.search(track)
 			beats_track.track_name.should eq "Wet Hair"
 		end
 	end
 
 	describe "login" do
 		it "should login in a user" do
-			@client.login('rsnorman15@gmail.com', 'wambam15').should be_true
+			client = BeatsWrapper.new
+			client.login('rsnorman15@gmail.com', 'wambam15').should be_true
 		end
 
 		it "should not login in a user with incorrect credentials" do
@@ -131,6 +130,24 @@ describe BeatsWrapper do
 			
 			album.reload.beats_id.should eq "al101137545"
 		end
+
+		it "should return an artist that matches the query" do
+			artist = Artist.create( 
+				:artist_name => "Animal Collective",
+				:mog_id => "")
+			beats_track = @client.search(artist)
+			beats_track.artist_name.should eq "Animal Collective"
+			beats_track.beats_id.should eq "ar178195"
+		end
+
+		it "should save the beats id in the database" do
+			artist = Artist.create( 
+				:artist_name => "Animal Collective",
+				:mog_id => "")
+			beats_track = @client.search(artist)
+			
+			artist.reload.beats_id.should eq "ar178195"
+		end
 	end
 
 	context "track" do
@@ -222,7 +239,7 @@ describe BeatsWrapper do
 				@client.unfavorite(@album)
 			end
 
-			it "should favorite a song that matches the album id" do
+			it "should favorite a album that matches the album id" do
 				@client.favorite(@album)
 				@client.is_favorited?(@album).should be_true
 			end
@@ -234,13 +251,86 @@ describe BeatsWrapper do
 					:album_name => "Post-Nothing", 
 					:artist_name => "Japandroids",
 					:mog_id => "30596455",
-					:beats_id => "tr30596457")
+					:beats_id => "al31504333")
 				@client.favorite(@album)
 			end
 
-			it "should unfavorite a song that matches the album id" do
+			it "should unfavorite a album that matches the album id" do
 				@client.unfavorite(@album)
 				@client.is_favorited?(@album).should be_false
+			end
+		end
+
+		describe "#add_to_library" do
+			before :each do
+				@album = Album.create(
+					:album_name => "Post-Nothing", 
+					:artist_name => "Japandroids",
+					:mog_id => "30596455",
+					:beats_id => "al31504333")
+				@client.remove_from_library(@album)
+			end
+
+			after :each do
+				@client.remove_from_library(@album)
+			end
+
+			it "should add a album to the library that matches the album id" do
+				@client.add_to_library(@album)
+				@client.is_in_library?(@album).should be_true
+			end
+		end
+
+		describe "#remove_from_library" do
+			before :each do
+				@album = Album.create( 
+					:album_name => "Post-Nothing", 
+					:artist_name => "Japandroids",
+					:mog_id => "30596455",
+					:beats_id => "al31504333")
+				@client.add_to_library(@album)
+			end
+
+			it "should remove a album from the library that matches the album id" do
+				@client.remove_from_library(@album)
+				@client.is_in_library?(@album).should be_false
+			end
+		end
+	end
+
+	context "artist" do
+
+		describe "#follow" do
+			before :each do
+				@artist = Artist.create( 
+					:artist_name => "Animal Collective",
+					:mog_id => "30596455",
+					:beats_id => "ar178195")
+				@client.unfollow(@artist)
+			end
+
+			after :each do
+				@client.unfollow(@artist)
+			end
+
+			it "should add a artist to the library that matches the artist id" do
+				@client.follow(@artist)
+				@client.is_followed?(@artist).should be_true
+			end
+		end
+
+		describe "#unfollow" do
+			before :each do
+				@artist = Artist.create( 
+					:artist_name => "Animal Collective",
+					:mog_id => "30596455",
+					:beats_id => "ar178195")
+				@client.follow(@artist)
+			end
+
+			it "should remove a artist from the library that matches the artist id" do
+				@client.unfollow(@artist)
+				@client.is_followed?(@artist).should be_false
 			end
 		end
 	end

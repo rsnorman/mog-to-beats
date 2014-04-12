@@ -10,7 +10,8 @@ describe "Beats" do
   		post "/beats/login", {:username => 'rsnorman15@gmail.com', :password => 'wambam15'}, {}
 
   		response.should be_ok
-  		JSON.parse(response.body)['success'].should be_true
+      JSON.parse(response.body)['user_id'].should_not be_nil
+  		JSON.parse(response.body)['auth_token'].should_not be_nil
   	end
 
   	it "should not log in the user to Beats with bad credentials" do
@@ -22,7 +23,7 @@ describe "Beats" do
 
   describe "/favorite_tracks" do
   	before :each do
-  		@client = BeatsWrapper.new('rsnorman15@gmail.com')
+  		@client = BeatsWrapper.new(BeatsWrapper::BEATS_TEST_USER_ID, BeatsWrapper::BEATS_TEST_AUTH_TOKEN)
   	end
 
   	after :each do 
@@ -80,18 +81,32 @@ describe "Beats" do
   end
 
   describe "/favorite_albums" do
+    before :each do
+      @client = BeatsWrapper.new(BeatsWrapper::BEATS_TEST_USER_ID, BeatsWrapper::BEATS_TEST_AUTH_TOKEN)
+    end
+
+    after :each do 
+      @client.unfavorite(Album.first)
+    end
+    
+    it "should favorite all albums saved in mog" do
+      post "/beats/favorite_albums", {:limit => 1}, auth_parameters
+      @client.is_favorited?(Album.first).should be true
+    end
+  end
+
+  describe "/favorite_artists" do
   	before :each do
-  		@client = BeatsWrapper.new('rsnorman15@gmail.com')
+  		@client = BeatsWrapper.new(BeatsWrapper::BEATS_TEST_USER_ID, BeatsWrapper::BEATS_TEST_AUTH_TOKEN)
   	end
 
-  	after :each do 
-  		@client.unfavorite(Album.first)
+  	after :each do
+  		@client.unfollow(Artist.first)
   	end
   	
-  	it "should favorite all albums saved in mog" do
-  		post "/beats/favorite_albums", {:limit => 1}, auth_parameters
-  		puts Album.first.inspect
-  		@client.is_favorited?(Album.first).should be true
+  	it "should favorite all artists saved in mog" do
+  		post "/beats/favorite_artists", {:limit => 1}, auth_parameters
+  		@client.is_followed?(Artist.first).should be true
   	end
   end
 end

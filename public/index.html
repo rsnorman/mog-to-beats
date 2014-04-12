@@ -154,26 +154,49 @@
 				<div class="container">
 					<div class="row">
 						<div class="12u">
-							<section id="intro">
-								<div class="row half">
-									<div class="6u loading-songs">
-										<p class="style1">Transfer Favorite Songs</p>
+							<section id="select-music-type">
+								<div class="row">
+									<div class="12u loading-music-container">
+										<p class="style1">Select Music To Transfer</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="12u loading-music-container">
+										<a class='transfer-choose style2' data-music-type="track" data-title="Songs" href="javascript:;">Songs</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="12u loading-music-container">
+										<a class='transfer-choose style2' data-music-type="album" data-title="Albums" href="javascript:;">Albums</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="12u loading-music-container">
+										<a class='transfer-choose style2' data-music-type="artist" data-title="Artists" href="javascript:;">Artists</a>
+									</div>
+								</div>
+							</section>
+
+							<section id="transfer-progress">
+								<div class="row">
+									<div class="12u loading-music-container">
+										<p class="style1">Transfer Favorite <span class="music-type"></span></p>
 										<div class='loading-music'>
-											<p>Grabbing Favorite Songs</p>
+											<p>Grabbing Favorite <span class="music-type"></span></p>
 											<div class="button-loader"></div>
 										</div>
 
 										<div class='loaded-music'>
-											<p>Found <span class="song-count"></span> Songs</p>
+											<p>Found <span class="music-count"></span> <span class="music-type"></span></p>
 										</div>
 										<div class='transferring-music'>
-											<p>Transfered <span class="song-success-count">0</span> of <span class="song-count"></span> Songs</p>
+											<p>Transfered <span class="music-success-count">0</span> of <span class="music-count"></span> <span class="music-type"></span></p>
 											<div class="button-loader"></div>
 										</div>
 
 										<div class='error-tracks'>
 											<p>
-												<span class="song-error-count"></span> Songs Could Not Be Transfered
+												<span class="music-error-count"></span> <span class="music-type"></span> Could Not Be Transfered
 												<a href="javascript:;" class="view-error-songs">view</a>
 											</p>
 											<ul class='error-track-container'>
@@ -181,23 +204,8 @@
 										</div>
 
 										<ul class="actions">
-											<li><input id="transfer_songs" type="submit" class="button button-style3" value="Begin" /></li>
-										</ul>
-									</div>
-
-									<div class="6u loading-albums">
-										<p class="style1">Transfer Favorite Albums</p>
-										<div class='loading-music'>
-											<p>Grabbing Favorite Albums</p>
-											<div class="button-loader"></div>
-										</div>
-										
-										<div class='loaded-music'>
-											<p>Found <span class="album-count"></span> Albums</p>
-										</div>
-
-										<ul class="actions">
-											<li><input id="transfer_albums" type="submit" class="button button-style3" value="Begin" /></li>
+											<li><input id="begin-music-transfer" type="submit" class="button button-style3" value="Begin" /></li>
+											<li><input id="transfer-more" type="submit" class="button button-style3" value="Transfer More Music" /></li>
 										</ul>
 									</div>
 								</div>

@@ -2,31 +2,27 @@ require 'spec_helper'
 
 describe MogWrapper do
 	before :all do
-		@client = MogWrapper.new
-		@client.login('rsnorman15@gmail.com', 'wambam15')
+		@client = MogWrapper.new("V3.PpcEwuNWs6emXNGOz2GLsr27FdV3X3eiykcVmJtzBNZAQ-ArAydsPWN5p6-zcRFL")
+		# @client.login('rsnorman15@gmail.com', 'wambam15')
 	end
 
 	describe "initialize" do
 		it "should create an agent with cookies loaded if cookie jar path is provided" do
-			client = MogWrapper.new('rsnorman15@gmail.com')
-			client.is_logged_in.should be_true
-			client.get_playlists.size.should eq 34
+			@client.is_logged_in.should be_true
+			@client.get_playlists.size.should eq 34
 		end
 	end
 
 	describe "login" do
-		# it "should login in a user" do
-		# 	@client.login('rsnorman15@gmail.com', 'wambam15').should be_true
-		# end
+		it "should login in a user" do
+			client = MogWrapper.new
+			client.login('rsnorman15@gmail.com', 'wambam15').should be_true
+		end
 
-		# it "should not login in a user with incorrect credentials" do
-		# 	@client.login('rsnorman15@gmail.com', 'badpassword').should be_false
-		# end
-
-		# it "should save the cookie jar in a file with the email address as the name of the file" do
-		# 	@client.login('rsnorman15@gmail.com', 'wambam15')
-		# 	File.exists?(Rails.root.join('cookie_jars', 'rsnorman15@gmail.com-mog.cookies')).should be_true
-		# end
+		it "should not login in a user with incorrect credentials" do
+			client = MogWrapper.new
+			client.login('rsnorman15@gmail.com', 'badpassword').should be_false
+		end
 	end
 
 	describe "get_playlists" do
@@ -75,7 +71,41 @@ describe MogWrapper do
 			favorites.first.artist_name.should eq "Cloud Nothings"
 			favorites.first.album_name.should eq "Here And Nowhere Else"
 			favorites.first.mog_id.should eq "101040151"
+		end
+	end
 
+	describe "get_favorite_artists" do
+		it "should return a list of favorites" do
+			favorites = @client.get_favorite_artists
+
+			favorites.size.should be > 7
+			favorites.first.artist_name.should eq "Nine Inch Nails"
+			favorites.first.mog_id.should eq "24468"
+		end
+	end
+
+	describe "get_favorite_track_count" do
+		it "should return a count of favorite tracks" do
+			count = @client.get_favorite_track_count
+
+			count.should be > 519
+
+		end
+	end
+
+	describe "get_favorite_album_count" do
+		it "should return a count of favorite albums" do
+			count = @client.get_favorite_album_count
+
+			count.should be > 64
+		end
+	end
+
+	describe "get_favorite_artist_count" do
+		it "should return a count of favorite artists" do
+			count = @client.get_favorite_artist_count
+
+			count.should be > 7
 		end
 	end
 end
